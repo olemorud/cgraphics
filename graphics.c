@@ -5,7 +5,7 @@
 
 #define uint unsigned int
 #define ON 'x'
-#define OFF '-'
+#define OFF '.'
 
 typedef struct Canvas {
 	int x;
@@ -25,13 +25,14 @@ void dot(Canvas* c, uint x, uint y);
  * main
  */
 int main(){
-	Canvas a = {40, 40, malloc(40*40)};
+	char *data = malloc(1600);
+	Canvas a = {40, 40, data};
 	memset(a.data, OFF, a.x * a.y);
 
 	//line(&a, 1, 1, 8, 8);
 	//line(&a, 8, 8, 1, 1);
 	//line(&a, 0, 5, 8, 8);
-	line(&a, 8, 8, 0, 5);
+	line(&a, 8, 8, 35, 39);
 
 
 	render(&a);
@@ -56,6 +57,7 @@ void render(Canvas* c){
 	}
 }
 
+
 /*
  * Sets pixel at x,y to ON
  */
@@ -63,8 +65,10 @@ void dot(Canvas* c, uint x, uint y){
 	c->data[ y*(c->x) + x] = ON;
 }
 
+
 /*
  * Draws a line from (start_x, start_y) to (end_x, end_y)
+ * This is the naive line drawing algorithm and is sub-optimal due to the use of floating point calculations
  */
 void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y){
 	int dx = end_x - start_x;
