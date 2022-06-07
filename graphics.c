@@ -19,27 +19,27 @@ typedef struct Canvas {
 void clear();
 void render(Canvas* c);
 void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y);
-void dot(Canvas* c, uint x, uint y);
+void dot(Canvas* c, const uint x, const uint y);
 
 
 /*
  * main
  */
-int main(){
-	char *data = malloc(40*40);
-	Canvas c = {40, 40, data};
-	memset(c.data, OFF, c.x * c.y);
-
-	//line(&c, 1, 1, 8, 8);
-	//line(&c, 8, 8, 1, 1);
-	//line(&c, 0, 5, 8, 8);
-	line(&c, 8, 8, 35, 39);
-
-
-	render(&c);
-
-	return 0;
-}
+//int main(){
+//	char *data = malloc(40*40);
+//	Canvas c = {40, 40, data};
+//	memset(c.data, OFF, c.x * c.y);
+//
+//	//line(&c, 1, 1, 8, 8);
+//	//line(&c, 8, 8, 1, 1);
+//	//line(&c, 0, 5, 8, 8);
+//	line(&c, 8, 8, 35, 39);
+//
+//
+//	render(&c);
+//
+//	return 0;
+//}
 
 
 
@@ -71,7 +71,7 @@ void render(Canvas* c){
 /*
  * Sets pixel at x,y to ON
  */
-void dot(Canvas* c, uint x, uint y){	
+void dot(Canvas* c, const uint x, const uint y){
 	c->data[ y*(c->x) + x] = ON;
 }
 
