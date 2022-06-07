@@ -15,7 +15,8 @@ typedef struct Canvas {
 
 
 
-// DECLARATIONS
+// Function Declarations
+void clear();
 void render(Canvas* c);
 void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y);
 void dot(Canvas* c, uint x, uint y);
@@ -43,17 +44,24 @@ int main(){
 
 
 /*
- * Draws an x*y rectangle with the characters in canvas* c
+ * Renders canvas* c on screen
  */
 void render(Canvas* c){
+	clear();
 	putchar('\n');
 
 	for(int i=0; i < c->y; i++){
+		printf("%2i ", i);
 		for(int j=0; j < c->x; j++){
 			putchar(c->data[i*(c->x)+j]);
 			putchar(' ');
 		}
 		putchar('\n');
+	}
+
+	printf("  ");
+	for(int i=0; i<(c->x); i+=2){
+		printf("%2i  ", i);
 	}
 }
 
@@ -108,3 +116,8 @@ void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y){
 	dot(c, end_x, end_y);
 }
 
+
+//TODO: find escape sequence for clearing screen
+void clear(){
+	printf("function clear() not implemented yet");
+}
