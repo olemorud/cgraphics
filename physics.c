@@ -3,13 +3,14 @@
 #include "graphics.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #define GRAVITY 0.01f
 #define FRAMERATE 10
 
 typedef struct Point{
-	double 	 x,  y;
-			px, py;
+	double 	 x,  y,
+			px, py,
 			fx, fy;
 } Point;
 
@@ -20,6 +21,7 @@ typedef struct Link {
 } Link;
 
 
+Link* link_points(Point* a, Point* b);
 void draw_link(Canvas* c, Link* l);
 void update_point(Point* p);
 
@@ -40,12 +42,12 @@ int main(){
 				20.0, 10.0,
 				0.0, GRAVITY/FRAMERATE};
 
-	Link l_ab = {&a, &b, 10};
+	Link *l_ab = link_points(&a, &b);
 	
 	while(1){
 		// clear canvas, calculate next frame and draw
 		memset(c.data, '.', c.x * c.y);
-		draw_link(&c, &l_ab);
+		draw_link(&c, l_ab);
 		update_point(&a);
 		update_point(&b);
 
@@ -55,6 +57,22 @@ int main(){
 	}
 
 	return 0;
+}
+
+/*
+ * Returns a link between two points
+ */
+Link* link_points(Point* a, Point* b){
+	Link *output = malloc(sizeof(Link));
+	
+	double dx = a->x - b->x;
+	double dy = a->y - b->y;
+
+	output->a = a;
+	output->b = b;
+	output->length = sqrt( dx*dx + dy*dy );
+
+	return output;
 }
 
 /*
