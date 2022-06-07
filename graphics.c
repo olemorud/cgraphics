@@ -26,17 +26,17 @@ void dot(Canvas* c, uint x, uint y);
  * main
  */
 int main(){
-	char *data = malloc(1600);
-	Canvas a = {40, 40, data};
-	memset(a.data, OFF, a.x * a.y);
+	char *data = malloc(40*40);
+	Canvas c = {40, 40, data};
+	memset(c.data, OFF, c.x * c.y);
 
-	//line(&a, 1, 1, 8, 8);
-	//line(&a, 8, 8, 1, 1);
-	//line(&a, 0, 5, 8, 8);
-	line(&a, 8, 8, 35, 39);
+	//line(&c, 1, 1, 8, 8);
+	//line(&c, 8, 8, 1, 1);
+	//line(&c, 0, 5, 8, 8);
+	line(&c, 8, 8, 35, 39);
 
 
-	render(&a);
+	render(&c);
 
 	return 0;
 }
@@ -44,21 +44,23 @@ int main(){
 
 
 /*
- * Renders canvas* c on screen
+ * Renders canvas* c on screen and adds line numbers on left and bottom
  */
 void render(Canvas* c){
 	clear();
 	putchar('\n');
 
 	for(int i=0; i < c->y; i++){
-		printf("%2i ", i);
+		printf("%2i ", i); //horizontal line numbers
+		
 		for(int j=0; j < c->x; j++){
 			putchar(c->data[i*(c->x)+j]);
 			putchar(' ');
 		}
 		putchar('\n');
 	}
-
+	
+	// vertical line numbers
 	printf("  ");
 	for(int i=0; i<(c->x); i+=2){
 		printf("%2i  ", i);
