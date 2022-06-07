@@ -5,8 +5,8 @@
 #include <string.h>
 #include <math.h>
 
-#define GRAVITY 0.01f
-#define FRAMERATE 10
+#define FRAMERATE 60
+#define GRAVITY 0.001f
 
 typedef struct Point{
 	double 	 x,  y,
@@ -32,8 +32,9 @@ void update_point(Point* p);
  */
 int main(){
 	char *data = malloc(40*40);
-	Canvas c = {40, 40, data};
+	Canvas cnv = {40, 40, data};
 
+	// Add 4 points, link them, and add points and links to respective arrays
 	Point a = { 10.0, 10.0,
 				10.0, 10.0, 
 				0.0, GRAVITY/FRAMERATE};
@@ -42,17 +43,35 @@ int main(){
 				20.0, 10.0,
 				0.0, GRAVITY/FRAMERATE};
 
+	Point c = { 20.0, 20.0,
+				20.0, 20.0,
+				0.0, GRAVITY/FRAMERATE};
+
+	Point d = { 10.0, 20.0,
+				10.0, 20.0,
+				0.0, GRAVITY/FRAMERATE};
+
 	Link *l_ab = link_points(&a, &b);
-	
+	Link *l_bc = link_points(&b, &c);
+	Link *l_cd = link_points(&c, &d);
+	Link *l_ad = link_points(&a, &d);
+
+	Point *points[] = {&a, &b, &c, &d};
+	Link  *links[]  = {l_ab, l_bc, l_cd, l_ad};
+
+
 	while(1){
 		// clear canvas, calculate next frame and draw
-		memset(c.data, '.', c.x * c.y);
-		draw_link(&c, l_ab);
-		update_point(&a);
-		update_point(&b);
+		memset(cnv.data, '.', cnv.x * cnv.y);
+
+		for(int i=0; i<4; i++)
+			draw_link(&cnv, links[i]);
+
+		for(int i=0; i<4; i++)
+			update_point(points[i]);
 
 		// then render and wait
-		render(&c);
+		render(&cnv);
 		usleep(1000000/FRAMERATE);
 	}
 
