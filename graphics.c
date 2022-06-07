@@ -123,3 +123,4 @@ void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y){
 void clear(){
 	printf("function clear() not implemented yet");
 }
+
