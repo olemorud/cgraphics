@@ -8,12 +8,9 @@
 #define FRAMERATE 10
 
 typedef struct Point{
-	double x;
-	double y;
-	double px;
-	double py;
-	double fx;
-	double fy;
+	double 	 x,  y;
+			px, py;
+			fx, fy;
 } Point;
 
 typedef struct Link {
@@ -29,7 +26,7 @@ void update_point(Point* p);
 
 
 /*
- * main
+ * Main
  */
 int main(){
 	char *data = malloc(40*40);
