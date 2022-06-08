@@ -1,0 +1,7 @@
+TODO
+
+Collision detection
+- group points and lines into bodies
+- collision with floor
+
+Line drawing anti-aliasing
