@@ -102,6 +102,7 @@ void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y){
 
 //TODO: find escape sequence for clearing screen
 void clear(){
-	printf("function clear() not implemented yet");
+	printf("\033[2;2H");	
+	//printf("function clear() not implemented yet");
 }
 
