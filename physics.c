@@ -55,7 +55,7 @@ int main(){
 
 	// Add 4 points, link them, and add points and links to respective arrays
 	Point a = { 10.0, 10.0,
-				10.0, 10.0, 
+				11.0, 10.0, 
 				0.0, GRAVITY/FRAMERATE};
 
 	Point b = { 20.0, 10.0,
@@ -63,7 +63,7 @@ int main(){
 				0.0, GRAVITY/FRAMERATE};
 
 	Point c = { 20.0, 20.0,
-				20.0, 20.0,
+				19.0, 20.0,
 				0.0, GRAVITY/FRAMERATE};
 
 	Point d = { 10.0, 20.0,
@@ -74,9 +74,11 @@ int main(){
 	Link *l_bc = link_points(&b, &c);
 	Link *l_cd = link_points(&c, &d);
 	Link *l_ad = link_points(&a, &d);
+	Link *l_ac = link_points(&a, &c);
+	Link *l_bd = link_points(&b, &d);
 
 	Point *points[] = {&a, &b, &c, &d};
-	Link  *links[]  = {l_ab, l_bc, l_cd, l_ad};
+	Link  *links[]  = {l_ab, l_bc, l_cd, l_ad, l_ac, l_bd};
 
 
 	while(1){
@@ -84,17 +86,16 @@ int main(){
 		memset(cnv.data, '.', cnv.x * cnv.y);
 	
 
-		for(int i=0; i<4; i++)
+		for(int i=0; i<6; i++)
 			draw_link(&cnv, links[i]);
 
 		for(int i=0; i<4; i++){	
 			update_point(points[i]);
 		}
 		
-		// This function doesn't work
-		//for(int i=0; i<4; i++){	
-		//	update_link(links[i]);
-		//}
+		for(int i=0; i<6; i++){	
+			update_link(links[i]);
+		}
 
 		// then render and wait
 		render(&cnv);
@@ -142,46 +143,28 @@ void draw_link(Canvas* c, Link* l){
  * and the forces acting upon it (fx,fy)
  */
 void update_point(Point* p){
-	uint tempx = p->x;
-	uint tempy = p->y;
+	double tempx = p->x;
+	double tempy = p->y;
 	p->x += (p->x - p->px) + p->fx;
 	p->y += (p->y - p->py) + p->fy;
 	p->px = tempx;
 	p->py = tempy;
 }
 
+
 /*
- * Returns vector of length 1 in direction from a to b
- * - probably a million ways to optimize this
- */
-Point* unit_vec(Point* a, Point* b){
-	Point* vec = malloc(sizeof(Point));
-	vec->x = b->x - a->x;
-	vec->y = b->y - a->y;
-	
-	Point origin = {0, 0};
-
-	double dist = distance(&origin, vec);
-
-	vec->x /= dist;
-	vec->y /= dist;
-
-	//printf("<%f, %f>, distance:%f", vec->x, vec->y, distance(&origin, vec));
-
-	return vec;
-}
-
-/* TODO
  * Moves points in link l such that their distance becomes l.length
  */
 void update_link(Link* l){
 	double cur_dist = distance(l->a, l->b);
-	double delta = l->length - cur_dist;
+	double delta = (l->length - cur_dist)/2.0f;
+
+	double nx = (l->b->x - l->a->x)/cur_dist;
+	double ny = (l->b->y - l->a->y)/cur_dist;
 	
-	Point* uvec = unit_vec(l->a, l->b);
-	l->a->x += uvec->x * delta;
-	l->a->y += uvec->y * delta;
-	l->b->x -= uvec->x * delta;
-	l->b->y -= uvec->y * delta;
+	l->a->x -= nx * delta;
+	l->a->y -= ny * delta;
+	l->b->x += nx * delta;
+	l->b->y += ny * delta;
 }
 
