@@ -28,6 +28,7 @@ typedef struct Link {
 /*
  * Function declarations
  */
+double distance(Point* a, Point* b);
 Link* link_points(Point* a, Point* b);
 void draw_link(Canvas* c, Link* l);
 void update_point(Point* p);
@@ -130,7 +131,7 @@ void update_point(Point* p){
  * Moves points in link l such that their distance becomes l.length
  */
 void update_link(Link* l){
-	double cur_dist = distance(l->a->x, l->a->y, l->b->x, l->b->y);
+	double cur_dist = distance(l->a, l->b);
 	double delta = l->length - cur_dist;
 
 }
