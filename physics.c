@@ -1,12 +1,10 @@
 
 #include <unistd.h>
-#include "graphics.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#define FRAMERATE 60
-#define GRAVITY 0.001f
+#include "graphics.h"
+#include "config.h"
 
 /* 
  * Points store position, position in previous frame and forces
@@ -42,8 +40,8 @@ void update_point(Point* p);
  * Main
  */
 int main(){
-	char *data = malloc(40*40);
-	Canvas cnv = {40, 40, data};
+	char *data = malloc(WIDTH*HEIGHT);
+	Canvas cnv = {WIDTH, HEIGHT, data};
 
 	// Add 4 points, link them, and add points and links to respective arrays
 	Point a = { 10.0, 10.0,
@@ -139,5 +137,7 @@ void update_point(Point* p){
 void update_link(Link* l){
 	double cur_dist = distance(l->a, l->b);
 	double delta = l->length - cur_dist;
+	
 
 }
+
