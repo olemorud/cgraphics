@@ -1,4 +1,5 @@
 
+//#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,15 +32,24 @@ typedef struct Link {
  * Function declarations
  */
 double distance(Point* a, Point* b);
+Point* unit_vec(Point* a, Point* b);
 Link* link_points(Point* a, Point* b);
 void draw_link(Canvas* c, Link* l);
 void update_point(Point* p);
+void update_link(Link* l);
 
 
 /*
  * Main
  */
 int main(){
+#if 0
+	Point a = {0, 0};
+	Point b = {10, 10};
+	unit_vec(&a, &b);
+#endif
+
+#if 1
 	char *data = malloc(WIDTH*HEIGHT);
 	Canvas cnv = {WIDTH, HEIGHT, data};
 
@@ -72,17 +82,25 @@ int main(){
 	while(1){
 		// clear canvas, calculate next frame and draw
 		memset(cnv.data, '.', cnv.x * cnv.y);
+	
 
 		for(int i=0; i<4; i++)
 			draw_link(&cnv, links[i]);
 
-		for(int i=0; i<4; i++)
+		for(int i=0; i<4; i++){	
 			update_point(points[i]);
+		}
+		
+		// This function doesn't work
+		//for(int i=0; i<4; i++){	
+		//	update_link(links[i]);
+		//}
 
 		// then render and wait
 		render(&cnv);
 		usleep(1000000/FRAMERATE);
 	}
+#endif
 
 	return 0;
 }
@@ -92,10 +110,11 @@ int main(){
  */
 double distance(Point* a, Point* b){
 	double dx = a->x - b->x;
-	double dy = b->y - b->y;
+	double dy = a->y - b->y;
 	
 	return sqrt(dx*dx + dy*dy);
 }
+
 
 /*
  * Returns a link between two points
@@ -119,7 +138,7 @@ void draw_link(Canvas* c, Link* l){
 
 /*
  * Updates the position of a point
- * the update is based on its position, its position in the previous frame (px, py)
+ * The update is based on its position (x,y), its position in the previous frame (px, py)
  * and the forces acting upon it (fx,fy)
  */
 void update_point(Point* p){
@@ -131,6 +150,27 @@ void update_point(Point* p){
 	p->py = tempy;
 }
 
+/*
+ * Returns vector of length 1 in direction from a to b
+ * - probably a million ways to optimize this
+ */
+Point* unit_vec(Point* a, Point* b){
+	Point* vec = malloc(sizeof(Point));
+	vec->x = b->x - a->x;
+	vec->y = b->y - a->y;
+	
+	Point origin = {0, 0};
+
+	double dist = distance(&origin, vec);
+
+	vec->x /= dist;
+	vec->y /= dist;
+
+	//printf("<%f, %f>, distance:%f", vec->x, vec->y, distance(&origin, vec));
+
+	return vec;
+}
+
 /* TODO
  * Moves points in link l such that their distance becomes l.length
  */
@@ -138,6 +178,10 @@ void update_link(Link* l){
 	double cur_dist = distance(l->a, l->b);
 	double delta = l->length - cur_dist;
 	
-
+	Point* uvec = unit_vec(l->a, l->b);
+	l->a->x += uvec->x * delta;
+	l->a->y += uvec->y * delta;
+	l->b->x -= uvec->x * delta;
+	l->b->y -= uvec->y * delta;
 }
 
