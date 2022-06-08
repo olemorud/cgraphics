@@ -8,16 +8,20 @@
 #define FRAMERATE 60
 #define GRAVITY 0.001f
 
-// Points store position, position in previous frame and forces
-// velocity is calculated from the distance between (x,y) and (px,py)
+/* 
+ * Points store position, position in previous frame and forces
+ * velocity is calculated from the distance between (x,y) and (px,py)
+ */
 typedef struct Point{
 	double 	 x,  y,
 			px, py,
 			fx, fy;
 } Point;
 
-// Links connect two points such that their distance is constant
-// these can be used to make rigid bodies
+/*
+ * Links connect two points such that their distance is constant
+ * these can be used to make rigid bodies
+ */
 typedef struct Link {
 	Point* a;
 	Point* b;
@@ -85,7 +89,9 @@ int main(){
 	return 0;
 }
 
-// Returns distance of two points
+/*
+ * Returns distance of two points
+ */
 double distance(Point* a, Point* b){
 	double dx = a->x - b->x;
 	double dy = b->y - b->y;
