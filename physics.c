@@ -56,19 +56,19 @@ int main(){
 	// Add 4 points, link them, and add points and links to respective arrays
 	Point a = { 10.0, 10.0,
 				11.0, 10.0, 
-				0.0, GRAVITY/FRAMERATE};
+				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
 	Point b = { 20.0, 10.0,
 				20.0, 10.0,
-				0.0, GRAVITY/FRAMERATE};
+				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
 	Point c = { 20.0, 20.0,
 				19.0, 20.0,
-				0.0, GRAVITY/FRAMERATE};
+				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
 	Point d = { 10.0, 20.0,
 				10.0, 20.0,
-				0.0, GRAVITY/FRAMERATE};
+				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
 	Link *l_ab = link_points(&a, &b);
 	Link *l_bc = link_points(&b, &c);
@@ -83,7 +83,7 @@ int main(){
 
 	while(1){
 		// clear canvas, calculate next frame and draw
-		memset(cnv.data, '.', cnv.x * cnv.y);
+		memset(cnv.data, OFF, cnv.x * cnv.y);
 	
 
 		for(int i=0; i<6; i++)
