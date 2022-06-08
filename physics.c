@@ -8,12 +8,16 @@
 #define FRAMERATE 60
 #define GRAVITY 0.001f
 
+// Points store position, position in previous frame and forces
+// velocity is calculated from the distance between (x,y) and (px,py)
 typedef struct Point{
 	double 	 x,  y,
 			px, py,
 			fx, fy;
 } Point;
 
+// Links connect two points such that their distance is constant
+// these can be used to make rigid bodies
 typedef struct Link {
 	Point* a;
 	Point* b;
@@ -21,10 +25,12 @@ typedef struct Link {
 } Link;
 
 
+/*
+ * Function declarations
+ */
 Link* link_points(Point* a, Point* b);
 void draw_link(Canvas* c, Link* l);
 void update_point(Point* p);
-
 
 
 /*
@@ -78,18 +84,23 @@ int main(){
 	return 0;
 }
 
+// Returns distance of two points
+double distance(Point* a, Point* b){
+	double dx = a->x - b->x;
+	double dy = b->y - b->y;
+	
+	return sqrt(dx*dx + dy*dy);
+}
+
 /*
  * Returns a link between two points
  */
 Link* link_points(Point* a, Point* b){
 	Link *output = malloc(sizeof(Link));
-	
-	double dx = a->x - b->x;
-	double dy = a->y - b->y;
 
 	output->a = a;
 	output->b = b;
-	output->length = sqrt( dx*dx + dy*dy );
+	output->length = distance(a, b);
 
 	return output;
 }
@@ -103,7 +114,8 @@ void draw_link(Canvas* c, Link* l){
 
 /*
  * Updates the position of a point
- * the update is based on its position, its position in the previous frame (px, py) and the forces acting upon it (fx,fy)
+ * the update is based on its position, its position in the previous frame (px, py)
+ * and the forces acting upon it (fx,fy)
  */
 void update_point(Point* p){
 	uint tempx = p->x;
@@ -114,3 +126,11 @@ void update_point(Point* p){
 	p->py = tempy;
 }
 
+/* TODO
+ * Moves points in link l such that their distance becomes l.length
+ */
+void update_link(Link* l){
+	double cur_dist = distance(l->a->x, l->a->y, l->b->x, l->b->y);
+	double delta = l->length - cur_dist;
+
+}
