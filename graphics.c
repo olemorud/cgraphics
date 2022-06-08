@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "config.h"
 
 #define uint unsigned int
-#define ON 'x'
-#define OFF '.'
 
 typedef struct Canvas {
 	int x;
@@ -23,27 +22,6 @@ void dot(Canvas* c, const uint x, const uint y);
 
 
 /*
- * main
- */
-//int main(){
-//	char *data = malloc(40*40);
-//	Canvas c = {40, 40, data};
-//	memset(c.data, OFF, c.x * c.y);
-//
-//	//line(&c, 1, 1, 8, 8);
-//	//line(&c, 8, 8, 1, 1);
-//	//line(&c, 0, 5, 8, 8);
-//	line(&c, 8, 8, 35, 39);
-//
-//
-//	render(&c);
-//
-//	return 0;
-//}
-
-
-
-/*
  * Renders canvas* c on screen and adds line numbers on left and bottom
  */
 void render(Canvas* c){
@@ -51,7 +29,9 @@ void render(Canvas* c){
 	putchar('\n');
 
 	for(int i=0; i < c->y; i++){
+#if LINENUMBERS
 		printf("%2i ", i); //horizontal line numbers
+#endif
 		
 		for(int j=0; j < c->x; j++){
 			putchar(c->data[i*(c->x)+j]);
@@ -60,11 +40,12 @@ void render(Canvas* c){
 		putchar('\n');
 	}
 	
+#if LINENUMBERS
 	// vertical line numbers
-	printf("  ");
 	for(int i=0; i<(c->x); i+=2){
-		printf("%2i  ", i);
+		printf("  %2i", i);
 	}
+#endif
 }
 
 
