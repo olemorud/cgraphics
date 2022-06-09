@@ -4,4 +4,5 @@ Collision detection
 - group points and lines into bodies
 - collision with floor
 
-Line drawing anti-aliasing
+~~line drawing anti-aliasing~~
+[x] line drawing subpixels
