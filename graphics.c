@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "config.h"
+#include <locale.h>
 
 #define uint unsigned int
 
@@ -19,6 +20,7 @@ void clear();
 void render(Canvas* c);
 void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y);
 void dot(Canvas* c, const uint x, const uint y);
+void subpixel(int m1, int m2, int n1, int n2);
 
 
 /*
@@ -44,6 +46,34 @@ void render(Canvas* c){
 	// vertical line numbers
 	for(int i=0; i<(c->x); i+=2){
 		printf("  %2i", i);
+	}
+#endif
+}
+
+
+/*
+ *	Renders canvas with subpixel rendering
+ * */
+void subpixel_render(Canvas* c){
+	setlocale(LC_ALL, "C.UTF-8");
+	clear();
+	putchar('\n');
+
+	for(int i=0; i < c->y; i+=2){
+#if LINENUMBERS
+		printf("%2i ", i*2); // horizontal line numbers
+#endif
+		for(int j=0; j < c->x; j+=2){
+			subpixel( 	c->data[i*(c->x) + j] == ON,     c->data[i*(c->x) + j+1] == ON,
+						c->data[(i+1)*(c->x) + j] == ON, c->data[(i+1)*(c->x) + j+1] == ON);
+		}
+		putchar('\n');
+	}
+
+#if 0
+	// vertical line numbers
+	for(int i=0; i<(c->x) / 2; i+=2){
+		printf("  %2i", i*2);
 	}
 #endif
 }
@@ -100,9 +130,33 @@ void line(Canvas* c, uint start_x, uint start_y, uint end_x, uint end_y){
 }
 
 
-//TODO: find escape sequence for clearing screen
+/*
+ * Clears terminal (for ANSI like terminal emulation)
+ */
 void clear(){
 	printf("\033[2;2H");	
-	//printf("function clear() not implemented yet");
+}
+
+/*
+ * Print 4 pixels as unicode character
+ * pixel arrangement is like this:
+ * m1,m2           1  0
+ * n1,n2, example: 0  1  =  '▚'
+ */
+void subpixel(int m1, int m2, int n1, int n2){	
+	const wchar_t *quads[] = 
+	{
+	/*       00,  01,  10,  11*/
+	/*00*/	L" ", L"▝", L"▘", L"▀",
+	/*01*/	L"▗", L"▐", L"▚", L"▜",
+	/*10*/	L"▖", L"▞", L"▌", L"▛",
+	/*11*/	L"▄", L"▟", L"▙", L"█",
+	};
+
+	int x = !!m2 + (!!m1<<1); 
+	int y = !!n2 + (!!n1<<1);
+
+	printf("%ls", quads[y*4 + x]);
+	printf("%s", "" );
 }
 

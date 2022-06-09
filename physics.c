@@ -43,31 +43,24 @@ void update_link(Link* l);
  * Main
  */
 int main(){
-#if 0
-	Point a = {0, 0};
-	Point b = {10, 10};
-	unit_vec(&a, &b);
-#endif
-
-#if 1
 	char *data = malloc(WIDTH*HEIGHT);
 	Canvas cnv = {WIDTH, HEIGHT, data};
 
 	// Add 4 points, link them, and add points and links to respective arrays
-	Point a = { 10.0, 10.0,
-				11.0, 10.0, 
+	Point a = { 20.0, 10.0,
+				21.0, 10.0, 
 				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
-	Point b = { 20.0, 10.0,
-				20.0, 10.0,
+	Point b = { 40.0, 10.0,
+				40.0, 10.0,
 				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
-	Point c = { 20.0, 20.0,
-				19.0, 20.0,
+	Point c = { 40.0, 30.0,
+				39.0, 30.0,
 				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
-	Point d = { 10.0, 20.0,
-				10.0, 20.0,
+	Point d = { 20.0, 30.0,
+				20.0, 30.0,
 				0.0, GRAVITY/(FRAMERATE*FRAMERATE)};
 
 	Link *l_ab = link_points(&a, &b);
@@ -98,10 +91,9 @@ int main(){
 		}
 
 		// then render and wait
-		render(&cnv);
+		subpixel_render(&cnv);
 		usleep(1000000/FRAMERATE);
 	}
-#endif
 
 	return 0;
 }
