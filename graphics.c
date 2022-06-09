@@ -66,6 +66,7 @@ void subpixel_render(Canvas* c){
 		for(int j=0; j < c->x; j+=2){
 			subpixel( 	c->data[i*(c->x) + j] == ON,     c->data[i*(c->x) + j+1] == ON,
 						c->data[(i+1)*(c->x) + j] == ON, c->data[(i+1)*(c->x) + j+1] == ON);
+			putchar(' ');
 		}
 		putchar('\n');
 	}
